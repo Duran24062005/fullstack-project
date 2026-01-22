@@ -1,6 +1,6 @@
 import swaggerJSDoc from 'swagger-jsdoc';
 import { app_config } from './config/app.config.js';
-'./routes/users.router.js'
+import path from 'path'
 
 const options = {
     definition: {
@@ -14,7 +14,10 @@ const options = {
             { url: `http://localhost:${app_config.app.port}` } // Tu URL base
         ],
     },
-    apis: ['./routes/*.js', './index.js'], // Archivos a escanear para comentarios
+    apis: [
+        path.resolve('./src/routes/*.js'),
+        path.resolve('./src/index.js')
+    ], // Archivos a escanear para comentarios
 };
 
 const swaggerSpec = swaggerJSDoc(options);

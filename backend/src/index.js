@@ -3,6 +3,7 @@ import { app_config } from './config/app.config.js'
 import swaggerUi from 'swagger-ui-express'
 import swaggerSpec from './swaggerConfig.js'
 import cors from 'cors'
+import users_router from './routes/users.router.js'
 
 const app = express()
 const port = app_config.app.port
@@ -31,7 +32,28 @@ app.get('/', (_req, res) => {
     });
 });
 
-
+/**
+ * @swagger
+ * /hola:
+ *   get:
+ *     summary: Ruta de prueba
+ *     description: Retorna un mensaje de prueba
+ *     tags: [Saludo]
+ *     responses:
+ *       200:
+ *         description: Respuesta exitosa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   status:
+ *                     type: string
+ *                   code:
+ *                     type: number
+ */
 app.get('/hola', (req, res) => {
     res.status(200).json([
         {
@@ -40,5 +62,7 @@ app.get('/hola', (req, res) => {
         }
     ])
 })
+
+app.use('/users', users_router)
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

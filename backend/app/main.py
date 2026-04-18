@@ -1,5 +1,7 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from .middlewares.cors import app_cors
+from .routes.auth import auth_router
+from .routes.users import users_router
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
@@ -7,56 +9,30 @@ from sqlalchemy.orm import Session
 from .database import get_db, engine, Base
 
 # Create tables if they don't exist (useful for development, but Alembic is preferred)
-# Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 load_dotenv()
 
 app = FastAPI(
-    title="Portfolio API V4",
+    title="StockFlow Fullstack Project API",
     version="1.0.0",
-    description="Backend migrated to FastAPI"
+    description="Fullstack Project API"
 )
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app_cors(app)
 
 @app.get("/")
 async def root():
     return {
         "status": "success",
-        "message": "Portfolio API V4",
-        "version": "1.0.0",
-        "endpoints": {
-            "blogs": "/api/blogs",
-            "projects": "/api/projects"
-        }
+        "message": "Fullstack Project API",
+        "version": "1.0.0"
     }
 
-@app.get("/hola")
-async def hola():
-    return [
-        {
-            "status": "Succesfully",
-            "code": 200
-        }
-    ]
-
-# User registration route (migrated from users.router.js)
-@app.post("/users/register")
-async def register_user():
-    return "Hola"
-
-@app.get("/users/")
-async def get_users():
-    return []
+app.include_router(auth_router, prefix="/api/auth", tags=["Auth"])
+app.include_router(users_router, prefix="/api/users", tags=["Users"])
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 3000))
+    port = int(os.getenv("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)

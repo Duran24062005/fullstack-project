@@ -1,72 +1,101 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Beehive Dashboard Colors */
   --color-background-beehive: #f9f9f8;
   --color-on-background-beehive: #1a1c1c;
   --color-surface-beehive: #f9f9f8;
   --color-on-surface-beehive: #1a1c1c;
   --color-on-surface-variant-beehive: #514532;
-  
   --color-primary-beehive: #7e5700;
   --color-on-primary-beehive: #ffffff;
   --color-primary-container-beehive: #ffb300;
   --color-on-primary-container-beehive: #6b4900;
   --color-primary-fixed-beehive: #ffdeac;
   --color-primary-fixed-dim-beehive: #ffba38;
-  
   --color-secondary-beehive: #466649;
   --color-on-secondary-beehive: #ffffff;
   --color-secondary-container-beehive: #c7ecc7;
   --color-on-secondary-container-beehive: #4c6c4f;
-  
   --color-tertiary-beehive: #835400;
   --color-on-tertiary-beehive: #ffffff;
   --color-tertiary-container-beehive: #ffb23f;
-  
   --color-error-beehive: #ba1a1a;
   --color-on-error-beehive: #ffffff;
   --color-error-container-beehive: #ffdad6;
-  
   --color-surface-container-lowest-beehive: #ffffff;
   --color-surface-container-low-beehive: #f4f4f3;
   --color-surface-container-beehive: #eeeeed;
   --color-surface-container-high-beehive: #e8e8e7;
   --color-surface-container-highest-beehive: #e2e2e2;
-  
   --color-outline-beehive: #847560;
   --color-outline-variant-beehive: #d6c4ac;
-
   --font-headline-beehive: "Manrope", sans-serif;
   --font-body-beehive: "Inter", sans-serif;
 
-  /* StockFlow Futuristic Colors */
-  --color-surface-stockflow: #131313;
-  --color-on-surface-stockflow: #e5e2e1;
-  --color-primary-stockflow: #adc6ff;
-  --color-primary-container-stockflow: #4b8eff;
-  --color-secondary-stockflow: #ddfcff;
-  --color-secondary-fixed-stockflow: #00dbe7;
-  --color-secondary-container-stockflow: #00f1fe;
-  --color-tertiary-stockflow: #ffb595;
-  --color-on-surface-variant-stockflow: #c1c6d7;
-  --color-surface-container-stockflow: #201f1f;
-  --color-surface-container-low-stockflow: #1c1b1b;
-  --color-outline-variant-stockflow: #414755;
-
+  --color-background-stockflow: #0a1018;
+  --color-surface-stockflow: #0f1722;
+  --color-surface-elevated-stockflow: #152131;
+  --color-surface-mute-stockflow: #1b2938;
+  --color-on-surface-stockflow: #edf3ff;
+  --color-on-surface-strong-stockflow: #ffffff;
+  --color-on-surface-variant-stockflow: #95a9c2;
+  --color-primary-stockflow: #ff9a3c;
+  --color-primary-container-stockflow: #ff6b2c;
+  --color-on-primary-stockflow: #10151b;
+  --color-secondary-stockflow: #82f0ff;
+  --color-secondary-fixed-stockflow: #24d5e8;
+  --color-secondary-container-stockflow: #173e47;
+  --color-tertiary-stockflow: #ffd972;
+  --color-outline-stockflow: #5c708c;
+  --color-outline-variant-stockflow: #27384d;
+  --color-surface-container-stockflow: #152131;
+  --color-surface-container-low-stockflow: #101925;
+  --color-surface-container-high-stockflow: #1b2938;
+  --color-surface-container-highest-stockflow: #24364a;
+  --color-surface-variant-stockflow: #102234;
   --font-headline-stockflow: "Space Grotesk", sans-serif;
-  --font-body-stockflow: "Inter", sans-serif;
+  --font-body-stockflow: "Manrope", sans-serif;
 }
 
 :root {
-  --background: #131313;
-  --foreground: #e5e2e1;
+  --background: #0a1018;
+  --foreground: #edf3ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body-stockflow);
+  background-image:
+    radial-gradient(circle at top left, rgba(255, 154, 60, 0.14), transparent 28%),
+    radial-gradient(circle at 85% 18%, rgba(36, 213, 232, 0.14), transparent 24%),
+    linear-gradient(180deg, #09111b 0%, #0b1320 45%, #091018 100%);
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+::selection {
+  background: rgba(255, 154, 60, 0.28);
+  color: #ffffff;
 }
 
 .glass-panel {
@@ -102,4 +131,257 @@ body {
 .tech-grid-stockflow {
   background-image: linear-gradient(rgba(65, 71, 85, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(65, 71, 85, 0.1) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+.stockflow-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--foreground);
+}
+
+.stockflow-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent 85%);
+}
+
+.stockflow-shell::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at center, transparent 0%, rgba(6, 10, 15, 0.2) 52%, rgba(6, 10, 15, 0.72) 100%);
+}
+
+.stockflow-container {
+  position: relative;
+  z-index: 1;
+  width: min(1200px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.stockflow-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  backdrop-filter: blur(24px);
+}
+
+.stockflow-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-headline-stockflow);
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--color-on-surface-strong-stockflow);
+}
+
+.stockflow-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.95rem;
+  background:
+    linear-gradient(135deg, rgba(255, 154, 60, 0.95), rgba(255, 107, 44, 0.9));
+  color: #08111a;
+  box-shadow: 0 16px 40px rgba(255, 107, 44, 0.22);
+}
+
+.stockflow-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-headline-stockflow);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-secondary-stockflow);
+}
+
+.stockflow-kicker::before {
+  content: "";
+  width: 2.2rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-secondary-fixed-stockflow));
+}
+
+.stockflow-title {
+  font-family: var(--font-headline-stockflow);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+  color: var(--color-on-surface-strong-stockflow);
+}
+
+.stockflow-panel {
+  background:
+    linear-gradient(180deg, rgba(24, 37, 53, 0.92), rgba(13, 22, 35, 0.88));
+  border: 1px solid rgba(149, 169, 194, 0.16);
+  border-radius: 1.75rem;
+  box-shadow:
+    0 24px 80px rgba(6, 9, 14, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(18px);
+}
+
+.stockflow-panel-soft {
+  background: rgba(16, 25, 37, 0.78);
+  border: 1px solid rgba(149, 169, 194, 0.12);
+  border-radius: 1.4rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.stockflow-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(149, 169, 194, 0.24), transparent);
+}
+
+.stockflow-stat {
+  padding: 1.15rem 1.2rem;
+  border-radius: 1.2rem;
+  border: 1px solid rgba(149, 169, 194, 0.14);
+  background: rgba(19, 31, 45, 0.78);
+}
+
+.stockflow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(149, 169, 194, 0.14);
+  background: rgba(16, 25, 37, 0.82);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-variant-stockflow);
+}
+
+.stockflow-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 999px;
+  padding: 0.95rem 1.4rem;
+  font-family: var(--font-headline-stockflow);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-on-primary-stockflow);
+  background: linear-gradient(135deg, var(--color-primary-stockflow), var(--color-primary-container-stockflow));
+  box-shadow: 0 18px 45px rgba(255, 107, 44, 0.28);
+}
+
+.stockflow-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 48px rgba(255, 107, 44, 0.34);
+}
+
+.stockflow-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 999px;
+  padding: 0.95rem 1.4rem;
+  border: 1px solid rgba(149, 169, 194, 0.18);
+  background: rgba(11, 19, 30, 0.72);
+  font-family: var(--font-headline-stockflow);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-on-surface-strong-stockflow);
+}
+
+.stockflow-input {
+  width: 100%;
+  border: 1px solid rgba(149, 169, 194, 0.15);
+  border-radius: 1rem;
+  background: rgba(10, 17, 26, 0.7);
+  color: var(--color-on-surface-strong-stockflow);
+  padding: 0.95rem 1rem;
+  outline: none;
+}
+
+.stockflow-input:focus {
+  border-color: rgba(255, 154, 60, 0.55);
+  box-shadow: 0 0 0 3px rgba(255, 154, 60, 0.12);
+}
+
+.stockflow-metric-value {
+  font-family: var(--font-headline-stockflow);
+  font-size: clamp(2rem, 5vw, 4.8rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.08em;
+  color: var(--color-on-surface-strong-stockflow);
+}
+
+.stockflow-ambient-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(60px);
+  opacity: 0.34;
+  pointer-events: none;
+  animation: stockflow-drift 10s ease-in-out infinite alternate;
+}
+
+.stockflow-reveal {
+  animation: stockflow-rise 520ms ease both;
+}
+
+@keyframes stockflow-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(14px, -16px, 0) scale(1.08);
+  }
+}
+
+@keyframes stockflow-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .stockflow-shell::before {
+    background-size: 28px 28px;
+    opacity: 0.32;
+  }
+
+  .stockflow-topbar {
+    padding: 0.85rem 0 1rem;
+  }
 }

@@ -27,6 +27,8 @@ venv
 *.sln
 *.sw?
 
+.codex
+
 # Databases
 *.db
 *.sqlite3

@@ -6,7 +6,7 @@ class AuthService:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
 
-    async def register(self, user_data: dict):
+    def register(self, user_data: dict):
         # Business Logic: Check if user exists
         existing_user = self.user_repository.get_user_by_email(user_data["email"])
         if existing_user:
@@ -27,7 +27,7 @@ class AuthService:
         new_user = self.user_repository.create_user(user_data)
         return {"status": "success", "message": "User registered successfully", "user": new_user}
 
-    async def login(self, credentials: dict):
+    def login(self, credentials: dict):
         user = self.user_repository.get_user_by_email(credentials["email"])
         if not user:
             return {"status": "error", "message": "Invalid credentials"}
@@ -50,4 +50,12 @@ class AuthService:
                 "email": user.email,
                 "role": user.role
             }
+        }
+
+    def logout(self, access_token: str | None = None):
+        return {
+            "status": "success",
+            "message": "Logout acknowledged. Client session cleared successfully.",
+            "revocation_applied": False,
+            "access_token_received": bool(access_token)
         }

@@ -1,165 +1,216 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
+import { FormEvent, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/auth-store";
+
+const registrationNotes = [
+  "Customer role provisioned by backend policy",
+  "Immediate handoff back to login after registration",
+  "Error feedback aligned with API contract",
+];
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const register = useAuthStore((state) => state.register);
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (isSubmitting) {
+      return;
+    }
+
+    setErrorMessage("");
+    setIsSubmitting(true);
+
+    try {
+      await register(username, email, password);
+      router.replace("/login");
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Unable to register");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <div className="bg-surface-dim-stockflow font-body-stockflow text-on-surface-stockflow min-h-screen flex flex-col items-center justify-center p-6 selection:bg-primary-stockflow/30 bg-mesh-stockflow">
+    <div className="stockflow-shell">
+      <div className="stockflow-ambient-orb left-[-4rem] bottom-16 h-72 w-72 bg-[rgba(255,154,60,0.28)]" />
+      <div className="stockflow-ambient-orb right-[-4rem] top-10 h-72 w-72 bg-[rgba(36,213,232,0.22)]" />
 
-      {/* Header / Brand Section */}
-      <header className="fixed top-0 left-0 w-full p-8 flex justify-between items-center z-50">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary-stockflow to-primary-container-stockflow flex items-center justify-center rounded-lg">
-            <span className="material-symbols-outlined text-on-primary-container-stockflow text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>deployed_code</span>
-          </div>
-          <span className="font-headline-stockflow text-2xl font-bold tracking-tighter text-primary-stockflow">StockFlow</span>
-        </div>
-        <div className="hidden md:flex items-center gap-8">
-          <span className="text-on-surface-variant-stockflow text-sm uppercase tracking-widest">Protocol v4.0.1</span>
-          <div className="h-4 w-px bg-outline-variant-stockflow/30"></div>
-          <a className="text-primary-stockflow text-sm uppercase tracking-widest hover:text-secondary-stockflow transition-colors" href="#">System Status: Online</a>
-        </div>
-      </header>
+      <div className="stockflow-container flex min-h-screen flex-col justify-center py-10">
+        <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
+          <section className="stockflow-reveal">
+            <Link href="/" className="stockflow-brand">
+              <span className="stockflow-brand-mark">
+                <span className="material-symbols-outlined">deployed_code</span>
+              </span>
+              StockFlow
+            </Link>
 
-      {/* Main Content Canvas */}
-      <main className="w-full max-w-lg relative">
-        {/* Background Decorative Element */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary-stockflow/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary-container-stockflow/5 rounded-full blur-[100px] pointer-events-none"></div>
-        
-        {/* Registration Container */}
-        <div className="glass-panel-stockflow p-10 md:p-12 rounded-xl shadow-[0_0_40px_rgba(0,0,0,0.4)] relative z-10 border border-white/10">
-          <div className="mb-10">
-            <h1 className="font-headline-stockflow text-4xl font-bold tracking-tighter text-on-surface-stockflow mb-2">Establish Account</h1>
-            <p className="text-on-surface-variant-stockflow">Initialize your credentials for the StockFlow ecosystem.</p>
-          </div>
-          
-          <form className="space-y-6">
-            {/* Operator Name */}
-            <div className="space-y-2 group">
-              <label className="block text-xs uppercase tracking-widest text-on-surface-variant-stockflow group-focus-within:text-primary-stockflow transition-colors" htmlFor="name">Operator Name</label>
-              <div className="relative flex items-center bg-surface-container-highest-stockflow rounded-lg px-4 py-1 transition-all focus-within:ring-1 focus-within:ring-primary-stockflow/50">
-                <span className="material-symbols-outlined text-outline-stockflow text-lg mr-3">badge</span>
-                <input 
-                  className="w-full bg-transparent border-none focus:ring-0 text-on-surface-stockflow placeholder:text-outline-stockflow/50 py-3" 
-                  id="name" 
-                  placeholder="IDENT_ALPHA_9" 
+            <div className="mt-10">
+              <div className="stockflow-kicker">Identity Provisioning</div>
+              <h1 className="stockflow-title mt-5 text-5xl sm:text-6xl">
+                Establish Account
+              </h1>
+              <p className="mt-6 max-w-xl text-lg leading-8 text-on-surface-variant-stockflow">
+                The registration flow now matches the updated frontend direction: stronger
+                typographic rhythm, clearer spacing, and a single intentional handoff into
+                the authenticated experience.
+              </p>
+            </div>
+
+            <div className="mt-8 space-y-4">
+              {registrationNotes.map((note, index) => (
+                <div
+                  key={note}
+                  className="stockflow-stat stockflow-reveal"
+                  style={{ animationDelay: `${index * 70}ms` }}
+                >
+                  <p className="flex items-center gap-3 text-sm font-semibold text-on-surface-strong-stockflow">
+                    <span className="material-symbols-outlined text-secondary-stockflow">check_circle</span>
+                    {note}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="stockflow-panel p-6 sm:p-8 lg:p-10 stockflow-reveal">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="stockflow-kicker !text-[0.62rem] before:!w-8">Provisioning Grid</p>
+                <h2 className="mt-4 font-headline-stockflow text-3xl font-bold text-on-surface-strong-stockflow">
+                  Initialize your credentials for the StockFlow ecosystem.
+                </h2>
+              </div>
+              <div className="stockflow-chip">Secure</div>
+            </div>
+
+            <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+              <div>
+                <label
+                  className="mb-2 block text-[0.72rem] font-headline-stockflow uppercase tracking-[0.22em] text-on-surface-variant-stockflow"
+                  htmlFor="name"
+                >
+                  Operator Name
+                </label>
+                <input
+                  autoComplete="username"
+                  className="stockflow-input"
+                  id="name"
+                  onChange={(event) => setUsername(event.target.value)}
+                  placeholder="IDENT_ALPHA_9"
+                  required
                   type="text"
+                  value={username}
                 />
               </div>
-            </div>
-            
-            {/* Email Identity */}
-            <div className="space-y-2 group">
-              <label className="block text-xs uppercase tracking-widest text-on-surface-variant-stockflow group-focus-within:text-primary-stockflow transition-colors" htmlFor="email">Email Identity</label>
-              <div className="relative flex items-center bg-surface-container-highest-stockflow rounded-lg px-4 py-1 transition-all focus-within:ring-1 focus-within:ring-primary-stockflow/50">
-                <span className="material-symbols-outlined text-outline-stockflow text-lg mr-3">alternate_email</span>
-                <input 
-                  className="w-full bg-transparent border-none focus:ring-0 text-on-surface-stockflow placeholder:text-outline-stockflow/50 py-3" 
-                  id="email" 
-                  placeholder="operator@nexus.core" 
+
+              <div>
+                <label
+                  className="mb-2 block text-[0.72rem] font-headline-stockflow uppercase tracking-[0.22em] text-on-surface-variant-stockflow"
+                  htmlFor="email"
+                >
+                  Email Identity
+                </label>
+                <input
+                  autoComplete="email"
+                  className="stockflow-input"
+                  id="email"
+                  onChange={(event) => setEmail(event.target.value)}
+                  placeholder="operator@nexus.core"
+                  required
                   type="email"
+                  value={email}
                 />
               </div>
-            </div>
-            
-            {/* Secure Passkey */}
-            <div className="space-y-2 group">
-              <div className="flex justify-between items-center">
-                <label className="block text-xs uppercase tracking-widest text-on-surface-variant-stockflow group-focus-within:text-primary-stockflow transition-colors" htmlFor="passkey">Secure Passkey</label>
-                <span className="text-[10px] text-outline-stockflow/60 uppercase tracking-tighter">AES-256 Encrypted</span>
-              </div>
-              <div className="relative flex items-center bg-surface-container-highest-stockflow rounded-lg px-4 py-1 transition-all focus-within:ring-1 focus-within:ring-primary-stockflow/50">
-                <span className="material-symbols-outlined text-outline-stockflow text-lg mr-3">lock</span>
-                <input 
-                  className="w-full bg-transparent border-none focus:ring-0 text-on-surface-stockflow placeholder:text-outline-stockflow/50 py-3" 
-                  id="passkey" 
-                  placeholder="••••••••••••" 
-                  type="password"
-                />
-                <button className="material-symbols-outlined text-outline-stockflow hover:text-primary-stockflow transition-colors" type="button">visibility</button>
-              </div>
-            </div>
-            
-            {/* Action Button */}
-            <div className="pt-4">
-              <Link href="/dashboard" className="w-full bg-gradient-to-r from-primary-stockflow to-primary-container-stockflow text-on-primary-stockflow font-headline-stockflow font-bold uppercase tracking-widest py-4 rounded-lg shadow-lg shadow-primary-stockflow/20 hover:shadow-primary-stockflow/40 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                <span>Establish Account</span>
-                <span className="material-symbols-outlined text-lg">arrow_forward</span>
-              </Link>
-            </div>
-          </form>
-          
-          <div className="mt-10 flex flex-col items-center gap-6">
-            <div className="flex items-center gap-4 w-full text-outline-stockflow/30">
-              <div className="h-px w-full bg-outline-variant-stockflow/30"></div>
-              <span className="text-[10px] uppercase tracking-widest whitespace-nowrap">External Auth</span>
-              <div className="h-px w-full bg-outline-variant-stockflow/30"></div>
-            </div>
-            <div className="grid grid-cols-2 gap-4 w-full">
-              <button className="flex items-center justify-center gap-2 py-3 bg-surface-container-stockflow hover:bg-surface-container-high-stockflow border border-outline-variant-stockflow/10 rounded-lg transition-all text-sm">
-                <span className="material-symbols-outlined text-primary-stockflow text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>account_balance_wallet</span>
-                <span>Web3 Wallet</span>
-              </button>
-              <button className="flex items-center justify-center gap-2 py-3 bg-surface-container-stockflow hover:bg-surface-container-high-stockflow border border-outline-variant-stockflow/10 rounded-lg transition-all text-sm">
-                <span className="material-symbols-outlined text-primary-stockflow text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>terminal</span>
-                <span>Nexus SSO</span>
-              </button>
-            </div>
-            <p className="text-on-surface-variant-stockflow text-sm">
-              Existing operative? 
-              <Link className="text-primary-stockflow font-medium hover:underline decoration-secondary-stockflow underline-offset-4 transition-all ml-1" href="/login">Recall Session</Link>
-            </p>
-          </div>
-        </div>
-        
-        {/* Decorative Info HUD */}
-        <div className="mt-8 grid grid-cols-3 gap-4">
-          <div className="bg-surface-container-low-stockflow p-3 rounded-lg flex flex-col items-center justify-center text-center gap-1 border-b-2 border-primary-stockflow/20">
-            <span className="material-symbols-outlined text-primary-stockflow text-sm">shield</span>
-            <span className="text-[10px] uppercase tracking-widest text-outline-stockflow">Quantum Sec</span>
-          </div>
-          <div className="bg-surface-container-low-stockflow p-3 rounded-lg flex flex-col items-center justify-center text-center gap-1 border-b-2 border-secondary-container-stockflow/20">
-            <span className="material-symbols-outlined text-secondary-container-stockflow text-sm">bolt</span>
-            <span className="text-[10px] uppercase tracking-widest text-outline-stockflow">Instant Sync</span>
-          </div>
-          <div className="bg-surface-container-low-stockflow p-3 rounded-lg flex flex-col items-center justify-center text-center gap-1 border-b-2 border-tertiary-stockflow/20">
-            <span className="material-symbols-outlined text-tertiary-stockflow text-sm">lan</span>
-            <span className="text-[10px] uppercase tracking-widest text-outline-stockflow">Neural Link</span>
-          </div>
-        </div>
-      </main>
 
-      {/* Footer Security Notice */}
-      <footer className="fixed bottom-0 w-full p-8 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-[0.2em] text-outline-stockflow/50">
-        <div className="flex gap-6 mb-4 md:mb-0">
-          <a className="hover:text-primary-stockflow transition-colors" href="#">Privacy Protocol</a>
-          <a className="hover:text-primary-stockflow transition-colors" href="#">Service Terms</a>
-          <a className="hover:text-primary-stockflow transition-colors" href="#">Security Audit</a>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-1.5 h-1.5 bg-secondary-fixed-dim-stockflow rounded-full shadow-[0_0_8px_#00dbe7]"></div>
-          <span>Encrypted Node: Stockholm_Center_01</span>
-        </div>
-      </footer>
+              <div>
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <label
+                    className="block text-[0.72rem] font-headline-stockflow uppercase tracking-[0.22em] text-on-surface-variant-stockflow"
+                    htmlFor="passkey"
+                  >
+                    Secure Passkey
+                  </label>
+                  <span className="text-[0.68rem] uppercase tracking-[0.22em] text-secondary-stockflow">
+                    AES-256 encrypted
+                  </span>
+                </div>
+                <div className="rounded-[1.1rem] border border-[rgba(149,169,194,0.15)] bg-[rgba(10,17,26,0.7)] px-4 py-2">
+                  <div className="flex items-center gap-3">
+                    <input
+                      autoComplete="new-password"
+                      className="min-w-0 flex-1 border-none bg-transparent py-3 text-on-surface-strong-stockflow outline-none"
+                      id="passkey"
+                      onChange={(event) => setPassword(event.target.value)}
+                      placeholder="••••••••••••"
+                      required
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                    />
+                    <button
+                      className="text-sm font-semibold text-primary-stockflow hover:text-secondary-stockflow"
+                      onClick={() => setShowPassword((current) => !current)}
+                      type="button"
+                    >
+                      {showPassword ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-      {/* Decorative Corner Elements */}
-      <div className="fixed top-0 right-0 p-8 opacity-20 pointer-events-none hidden lg:block">
-        <svg fill="none" height="100" viewBox="0 0 100 100" width="100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 1H99V100" stroke="#adc6ff" strokeWidth="2"></path>
-          <rect fill="#adc6ff" height="2" width="2" x="94" y="5"></rect>
-          <rect fill="#adc6ff" height="2" width="2" x="94" y="12"></rect>
-          <rect fill="#adc6ff" height="2" width="2" x="94" y="19"></rect>
-        </svg>
-      </div>
-      <div className="fixed bottom-0 left-0 p-8 opacity-20 pointer-events-none hidden lg:block">
-        <svg fill="none" height="100" viewBox="0 0 100 100" width="100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M100 99H1V0" stroke="#adc6ff" strokeWidth="2"></path>
-          <rect fill="#adc6ff" height="2" width="2" x="4" y="93"></rect>
-          <rect fill="#adc6ff" height="2" width="2" x="11" y="93"></rect>
-          <rect fill="#adc6ff" height="2" width="2" x="18" y="93"></rect>
-        </svg>
+              {errorMessage ? (
+                <p
+                  aria-live="polite"
+                  className="rounded-2xl border border-red-400/20 bg-red-950/20 px-4 py-3 text-sm text-red-300"
+                >
+                  {errorMessage}
+                </p>
+              ) : null}
+
+              <button className="stockflow-btn-primary w-full" disabled={isSubmitting} type="submit">
+                {isSubmitting ? "Creating Account..." : "Establish Account"}
+                <span className="material-symbols-outlined text-base">north_east</span>
+              </button>
+            </form>
+
+            <div className="stockflow-divider my-8" />
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <button className="stockflow-btn-secondary !justify-start !rounded-2xl !border-[rgba(149,169,194,0.14)] !px-5 !py-4">
+                <span className="material-symbols-outlined">account_balance_wallet</span>
+                Web3 Wallet
+              </button>
+              <button className="stockflow-btn-secondary !justify-start !rounded-2xl !border-[rgba(149,169,194,0.14)] !px-5 !py-4">
+                <span className="material-symbols-outlined">terminal</span>
+                Nexus SSO
+              </button>
+            </div>
+
+            <footer className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-on-surface-variant-stockflow">
+                Existing operative?
+                <Link className="ml-2 font-semibold text-primary-stockflow hover:text-secondary-stockflow" href="/login">
+                  Recall Session
+                </Link>
+              </p>
+              <p className="text-[0.68rem] uppercase tracking-[0.22em] text-on-surface-variant-stockflow">
+                Quantum Sec / Instant Sync / Neural Link
+              </p>
+            </footer>
+          </section>
+        </div>
       </div>
     </div>
   );

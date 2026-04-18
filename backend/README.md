@@ -33,3 +33,22 @@ backend
 
 3. **API Documentation:**
    Once running, visit `http://localhost:3000/docs` for the interactive Swagger UI.
+
+## Database Migrations
+
+This project uses Alembic for database migrations.
+
+1. **Create a new migration:**
+   ```bash
+   alembic revision --autogenerate -m "description of changes"
+   ```
+
+2. **Apply migrations:**
+   ```bash
+   alembic upgrade head
+   ```
+
+3. **Rollback last migration:**
+   ```bash
+   alembic downgrade -1
+   ```

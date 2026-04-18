@@ -3,6 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
+from sqlalchemy.orm import Session
+from .database import get_db, engine, Base
+
+# Create tables if they don't exist (useful for development, but Alembic is preferred)
+# Base.metadata.create_all(bind=engine)
 
 load_dotenv()
 

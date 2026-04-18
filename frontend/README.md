@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend
 
 ## Getting Started
 
-First, run the development server:
+Run the frontend locally:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app is served on `http://localhost:3000` by default.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Auth Session Convention
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This frontend uses a single persisted Zustand store as the source of truth for authentication state.
 
-## Learn More
+- Store location: `lib/auth-store.ts`
+- Persistence: Zustand `persist` backed by `localStorage`
+- Persisted fields: `accessToken`, `tokenType`, `user`, `isAuthenticated`
+- Supported auth actions: `login`, `logout`, `hydrate`, `clearSession`
 
-To learn more about Next.js, take a look at the following resources:
+## Auth API Integration
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Backend base URL is read from `NEXT_PUBLIC_API_URL`
+- Default backend URL is `http://localhost:8000`
+- `POST /api/auth/login` bootstraps the frontend session
+- `POST /api/auth/logout` acknowledges logout and the frontend always clears the local session even if that request fails
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Route Protection
 
-## Deploy on Vercel
+- `/dashboard` and `/profile` are protected client-side routes
+- `/login` redirects authenticated users to `/dashboard`
+- Public screens keep their current behavior in this iteration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Security Note
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This iteration stores JWT session data in `localStorage`. That is acceptable for the current scope, but it is less secure than an HttpOnly cookie-based flow and should not be treated as final auth hardening.

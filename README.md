@@ -12,6 +12,24 @@ StockFlow es un sistema completo de gestión de inventario diseñado para peque�
 ## 🎯 Objetivo del Proyecto
 
 Este proyecto es desarrollado con fines de práctica y aprendizaje de desarrollo full stack profesional, aplicando:
+## Running with Docker
+
+You can run the entire application (frontend and backend) using Docker Compose:
+
+1. **Build and start the containers:**
+   ```bash
+   docker-compose up --build
+   ```
+
+2. **Access the application:**
+   - Frontend: `http://localhost:3000`
+   - Backend API: `http://localhost:8000`
+   - API Docs: `http://localhost:8000/docs`
+
+3. **Stop the containers:**
+   ```bash
+   docker-compose down
+   ```
 
 - Arquitectura de software escalable y mantenible
 - Separación clara de responsabilidades (frontend/backend/base de datos)
